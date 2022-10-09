@@ -1,0 +1,290 @@
+:root {
+  --first-layer: #483434;
+  --second-layer: #6B4F4F;
+  --third-layer: #EED6C4;
+  --fourth-layer: #FFF3E4;
+  --middle-container: 900px;
+  --my-box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0; 
+  background: var(--first-layer);
+  display: grid;
+  grid-template-areas: 
+  "head head"
+  "nav main"
+  "footer footer";
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 64px 1fr 48px;
+} 
+
+header {
+  padding: 10px;
+  grid-area: head;
+}
+
+header > h1 {
+  text-align: center;
+  margin: 0;
+  color: var(--fourth-layer);
+  font-family: "Caveat";
+}
+
+nav {
+  background: var(--second-layer);
+  grid-area: nav;
+  height: 100%;
+}
+
+main {
+  grid-area: main;
+  background: var(--third-layer);
+}
+
+footer {
+  grid-area: footer;
+  background: var(--first-layer);
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0 !important;
+}
+
+.nav-list-item {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--fourth-layer);
+  font-family: "Caveat";
+  padding: 8px;
+  text-align: center;
+}
+
+.active-item {
+  background: grey;
+}
+
+hr {
+  border: 2px solid var(--third-layer);
+}
+
+#add-project-button {
+  color: var(--fourth-layer);
+  font-weight: 800;
+  background: rgba(0,0,0, 0.1);
+  width: 50%;
+  margin: 0 auto;
+  border: 0;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.4);
+}
+
+.task-container {
+  width: var(--middle-container);
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: grid;
+  grid-template-rows: 48px 1fr ;
+  font-family: "Roboto";
+  color: var(--first-layer);
+}
+
+.task-header {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.task-item {
+  padding: 0 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 15px;
+}
+
+
+details[open] summary {
+  margin-bottom: .5em;
+}
+
+p {
+  display: block;
+  margin: 0;
+}
+
+i:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+
+.task-date-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.task-date-container i, .task-date-container input {
+  width: 15px;
+  height: 15px;
+}
+
+.task-date-container input {
+  margin: 0;
+}
+
+.add-task-container {
+  margin-top: 50px;
+  width: var(--middle-container);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+#add-task-button {
+  margin-top: 25px !important;
+  padding: 8px 15px;
+  font-family: "Roboto";
+  border: 0;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background: var(--third-layer);
+  font-size: 1.2rem;
+}
+
+#add-task-button:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.task-modal {
+  overflow: hidden;
+  width: 480px;
+  height: 240px;
+  font-family: "Roboto";
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background: var(--third-layer);
+}
+
+.task-modal::backdrop {
+  background: rgba(0,0,0, 0.6);
+}
+
+.task-modal-body {
+  display: grid;
+  grid-template-areas: 
+  "head head"
+  "desc date"
+  "desc project";
+  gap: 15px;
+}
+
+.task-modal-title {
+  grid-area: head;
+}
+
+.task-modal-title input {
+  width: 100%;
+}
+
+.task-modal-description {
+  grid-area: desc;
+}
+
+.task-modal-description textarea {
+  resize: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+}
+
+label {
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+select {
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  border-radius: 3px;
+  font-family: "Roboto";
+}
+
+#task-title {
+  height: 30px;
+}
+
+.task-modal-date {
+  grid-area: date;
+}
+
+.task-modal-project {
+  grid-area: project;
+}
+
+.task-buttons {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.task-buttons button {
+  padding: 8px 15px;
+}
+
+.task-buttons button, input[type="button"] {
+  border: 0;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.4);
+  background: var(--third-layer);
+}
+
+.task-error-message {
+  margin-top: 10px;
+  text-align: center;
+  color: red;
+  font-size: 0.8em;
+}
+
+.type-cancel {
+  width: 70px;
+  height: 32px;
+  padding: 8px 15px;
+  border-radius: 0px;
+}
+
+.task-buttons button, input[type="button"]:hover {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--fourth-layer);
+  font-family: "Caveat";
+}
+
+li:hover:not(#projects) {
+  cursor: pointer;
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/11fc53aed0.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="style.css">
+  <title>To Do List</title>
+</head>
+<body>
+  <header>
+    <h1>To Do List</h1>
+  </header>
+  <nav>
+    <ul class="nav-list">
+      <li class="nav-list-item" id="home">Home</li>
+      <li class="nav-list-item" id="today">Today</li>
+      <hr>
+      <li class="nav-list-item" id="projects">Projects</li>
+    </ul>
+  </nav>
+  <main>
+    <div class="task-container" id="task-container">
+    </div>
+  </main>
+  <footer>Developed for the The Odin Project © Dee, John Christopher 2022</footer>
+  <!-- ADD TASK MODAL STARTS HERE -->
+  <dialog class="task-modal" id="task-modal">
+    <form action="#" method="dialog" id="task-form">
+      <div class="task-modal-body">
+        <div class="task-modal-title">
+          <input type="text" placeholder="Title" name="task-title" id="task-title" required>
+        </div>
+        <div class="task-modal-description">
+          <textarea name="task-description" id="task-description" placeholder="Description" required></textarea>
+        </div>
+        <div class="task-modal-date">
+          <label for="task-date">Date:</label>
+          <input type="date" name="task-date" id="task-date" required>
+        </div>
+        <div class="task-modal-project">
+          <label for="task-project">Project:</label>
+          <select name="task-project" id="task-project">
+            <!-- <option value="Home">Home</option>
+            <option value="Gym">Gym</option> -->
+          </select>
+        </div>
+      </div>
+      <div class="task-error-message hidden" id="task-error-message">
+        <p>A task with the same title and date already exists</p>
+      </div>
+      <div class="task-buttons">
+        <button type="submit" id="task-submit">Submit</button>
+        <input type="button" value="Cancel" class="type-cancel" id="task-cancel">
+      </div>
+    </form>
+  </dialog>
+  <!-- TASK MODAL ENDS HERE -->
+  <!-- EDIT TASK MODAL STARTS HERE -->
+  <dialog class="task-modal" id="edit-modal">
+    <form action="#" method="dialog" id="edit-form">
+      <div class="task-modal-body">
+        <div class="task-modal-title">
+          <input type="text" name="task-title" id="edit-title" required>
+        </div>
+        <div class="task-modal-description">
+          <textarea name="edit-description" id="edit-description" required></textarea>
+        </div>
+        <div class="task-modal-date">
+          <label for="edit-date">Date:</label>
+          <input type="date" name="edit-date" id="edit-date" required>
+        </div>
+        <div class="task-modal-project">
+          <label for="edit-project">Project:</label>
+          <select name="edit-project" id="edit-project">
+            <option value="Home">Home</option>
+            <option value="Gym">Gym</option>
+          </select>
+        </div>
+      </div>
+      <div class="task-error-message hidden" id="edit-error-message">
+        <p>A task with the same title and date already exists</p>
+      </div>
+      <div class="task-buttons">
+        <button type="submit" id="edit-submit">Submit</button>
+        <input type="button" value="Cancel" class="type-cancel" id="edit-cancel">
+      </div>
+      <p class="hidden" id="old-title"></p>
+      <p class="hidden" id="old-date"></p>
+    </form>
+  </dialog>
+  <!-- EDIT TASK MODAL ENDS HERE -->
+  <script src="./index.js" type="module"></script>
+</body>
+</html>
