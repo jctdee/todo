@@ -52,6 +52,18 @@ function saveTask(project, title, description, date) {
           // refresh the page because it is showing html object
           window.location = window.location;
         }
+      } else {
+        // NO EXISTING TASK..
+
+        // push this new task into tasks array
+        const tempTask = new Task(project.value, title.value, description.value, dateFormatter(date.value));
+        taskArray.push(tempTask);
+
+        // save the new array into local storage
+        localStorage.setItem('Tasks', JSON.stringify(taskArray));
+
+        // refresh the page because it is showing html object
+        window.location = window.location;
       }
     } catch (err) {
       console.log(err);
@@ -141,11 +153,23 @@ function saveLocalProject(project) {
           // refresh the page because it is showing html object
           window.location = window.location;
         }
+      } else {
+        // PROJECT DOES NOT EXIST YET..
+
+        // push this new task into project array
+        const tempProject = new Project(project);
+        projectArray.push(tempProject);
+
+        // save the new array into local storage
+        localStorage.setItem('Projects', JSON.stringify(projectArray));
+
+        // refresh the page because it is showing html object
+        window.location = window.location;
       }
     } catch (err) {
       console.log(err);
     }
-  }
+  } 
 }
 
 

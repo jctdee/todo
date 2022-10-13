@@ -17,10 +17,10 @@ let projectType;
 window.onload = (event) => {
   createProjectTab();
 
-  if(getCurrentTab().length !== 0) {
-    navSwitcher(getCurrentTab());
-  } else {
+  if(getCurrentTab() === null) {
     navSwitcher('Home');
+  } else {
+    navSwitcher(getCurrentTab());
   }
 
   // CREATE TAB NAVIGATION HERE
@@ -214,6 +214,7 @@ function navSwitcher(e) {
       projectItemTab(e);
       break;
   }
+  createTaskButton();
 }
 
 function createProjectTab() {
@@ -256,7 +257,6 @@ function itemCreator(list) {
   list.forEach(task => {
     addTaskChildren(task.title, task.description, task.dueDate, task.project, taskContainer);
   })
-  createTaskButton();
 }
 
 // END OF TAB CREATORS HERE
