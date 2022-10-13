@@ -1,4 +1,5 @@
 import { Task, dateFormatter } from './tasks.js';
+import { Project } from './project.js';
 
 function storageAvailable(type) {
   let storage;
@@ -114,6 +115,39 @@ function editLocalTask(project, title, description, date, oldTitle, oldDate) {
   } 
 }
 
+function saveLocalProject(project) {
+  if(storageAvailable('localStorage')) {
+    try {
+      const projectArray = [];
+
+      // grab task items here first and parse
+      if(localStorage.getItem('Projects') !== null) {
+        const deserializedProjects = JSON.parse(localStorage.getItem('Projects'));
+
+        // insert deserialized list into js array
+        for(let i = 0; i < deserializedProjects.length; i++) projectArray.push(deserializedProjects[i]);
+
+        // check if there's a project with same name
+        if(projectArray.filter(task => task.name === project).length !== 0) {
+          return;
+        } else {
+          // push this new task into project array
+          const tempProject = new Project(project);
+          projectArray.push(tempProject);
+
+          // save the new array into local storage
+          localStorage.setItem('Projects', JSON.stringify(projectArray));
+
+          // refresh the page because it is showing html object
+          window.location = window.location;
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
 
 
-export { saveTask, deleteLocalTask, editLocalTask, storageAvailable };
+
+export { saveTask, deleteLocalTask, editLocalTask, storageAvailable, saveLocalProject };

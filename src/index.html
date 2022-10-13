@@ -16,8 +16,8 @@
   </header>
   <nav>
     <ul class="nav-list">
-      <li class="nav-list-item" id="home">Home</li>
-      <li class="nav-list-item" id="today">Today</li>
+      <li class="nav-list-item" id="Home">Home</li>
+      <li class="nav-list-item" id="Today">Today</li>
       <hr>
       <li class="nav-list-item" id="projects">Projects</li>
     </ul>
@@ -76,8 +76,7 @@
         <div class="task-modal-project">
           <label for="edit-project">Project:</label>
           <select name="edit-project" id="edit-project">
-            <option value="Home">Home</option>
-            <option value="Gym">Gym</option>
+            
           </select>
         </div>
       </div>
@@ -93,6 +92,24 @@
     </form>
   </dialog>
   <!-- EDIT TASK MODAL ENDS HERE -->
+  <!-- ADD PROJECT MODAL STARTS HERE -->
+  <dialog class="project-modal" id="project-modal">
+    <form method="dialog" id="project-form">
+      <div class="project-modal-body">
+        <div class="project-name">
+          <label for="project-name">Project Title:</label>
+          <input type="text" name="project-name" id="project-name">
+        </div>
+        <div class="task-error-message hidden" id="project-error-message">
+          <p>A project with the same name already exists</p>
+        </div>
+        <div class="task-buttons">
+          <button type="submit" id="project-submit">Submit</button>
+          <input type="button" value="Cancel" class="type-cancel" id="project-cancel">
+        </div>
+      </div>
+    </form>
+  </dialog>
   <script src="./index.js" type="module"></script>
 </body>
 </html>

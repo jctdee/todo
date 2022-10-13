@@ -1,35 +1,42 @@
 import { addTaskChildren, dateFormatter, getCurrentTask } from './tasks.js';
 import { getLocalProjects, addProjectChildren, addProjectOption } from './project.js';
-import { saveTask, deleteLocalTask, editLocalTask } from './storage.js';
+import { saveTask, deleteLocalTask, editLocalTask, saveLocalProject } from './storage.js';
 
 
 const taskModal = document.getElementById('task-modal');
 const editModal = document.getElementById('edit-modal');
+const projectModal = document.getElementById('project-modal');
 const taskContainer = document.getElementById('task-container');
 const taskForm = document.getElementById('task-form');
 const editForm = document.getElementById('edit-form');
+const projectForm = document.getElementById('project-form');
 let closeType;
 let editType;
+let projectType;
 
 window.onload = (event) => {
-  homeTab();
+  createProjectTab();
+
+  if(getCurrentTab().length !== 0) {
+    navSwitcher(getCurrentTab());
+  } else {
+    navSwitcher('Home');
+  }
 
   // CREATE TAB NAVIGATION HERE
-  document.getElementById('home').addEventListener('click', () => {
-    homeTab();
-  })
-  document.getElementById('today').addEventListener('click', () => {
-    todayTab();
-  })
-
-  createProjectTab();
+  // document.getElementById('Home').addEventListener('click', () => {
+  //   homeTab();
+  // })
+  // document.getElementById('Today').addEventListener('click', () => {
+  //   todayTab();
+  // })
   document.querySelector('.nav-list').addEventListener('click', (e) => {
     if(e.target && e.target.nodeName === 'LI' && e.target.id !== 'projects' && e.target.id !== 'add-project-button') {
-      setActive(e.target.id);
+      navSwitcher(e.target.id);
     }
   })
-}
 
+}
 
 
 taskForm.addEventListener('submit', () => {
@@ -40,12 +47,21 @@ editForm.addEventListener('submit', () => {
   editType = 'submit';
 })
 
+projectForm.addEventListener('submit', () => {
+  projectType = 'submit';
+})
+
+
 
 document.getElementById('task-cancel').addEventListener('click', () => {
   closeType = null;
   taskModal.close();
 });
 
+document.getElementById('project-cancel').addEventListener('click', () => {
+  projectType = null;
+  projectModal.close();
+})
 
 taskContainer.addEventListener('click', (e) => {
   if(e.target && e.target.dataset.mode === 'delete') {
@@ -53,10 +69,13 @@ taskContainer.addEventListener('click', (e) => {
   } else if (e.target && e.target.dataset.mode === 'edit') {
     const editDate = document.getElementById('edit-date');
     editDate.setAttribute('min', minDate());
+    createProjectOptions('#edit-project');
     editModal.showModal();
     setTempOldValues(e.target.parentNode.parentNode);
   }
 })
+
+// MODAL LISTENERES HERE
 
 taskModal.addEventListener('close', () => {
   if(closeType === 'submit') {
@@ -68,6 +87,7 @@ taskModal.addEventListener('close', () => {
     if(saveTask(taskProject, taskTitle, taskDescription, taskDate)) {
       addTaskChildren(taskTitle, taskDescription, taskDate, taskProject, taskContainer);
       document.getElementById('task-error-message').classList.add('hidden');
+      navSwitcher(getCurrentTab());
     } else {
       document.getElementById('task-error-message').classList.remove('hidden');
       taskModal.showModal();
@@ -86,13 +106,29 @@ editModal.addEventListener('close', () => {
   
     if(editLocalTask(taskProject, taskTitle, taskDescription, taskDate, oldTitle, oldDate)){
       document.getElementById('edit-error-message').classList.add('hidden');
+      navSwitcher(getCurrentTab());
     } else {
       document.getElementById('edit-error-message').classList.remove('hidden');
       editModal.showModal();
     }
   }
-  
 })
+
+projectModal.addEventListener('close', () => {
+  if(projectType === 'submit') {
+    const projectName = document.getElementById('project-name').value;
+
+    if(saveLocalProject(projectName)) {
+      document.getElementById('project-error-message').classList.add('hidden');
+      navSwitcher(getCurrentTab());
+    } else {
+      document.getElementById('project-error-message').classList.remove('hidden');
+      projectModal.showModal();
+    }
+  }
+})
+
+// END OF MODAL LISTENERS
 
 function setTempOldValues(e) {
   // temporary store values of task here
@@ -108,7 +144,6 @@ function setTempOldValues(e) {
   document.getElementById('edit-description').value = currentTask.description;
   document.getElementById('edit-project').value = currentTask.project;
   document.getElementById('edit-date').value = formatDate(currentTask.dueDate);
-  console.log(currentTask.dueDate);
 }
 
 function minDate() {
@@ -137,32 +172,47 @@ function formatDate(date) {
 // TAB CREATORS HERE
 
 function homeTab() {
-  resetContainer();
-  setActive('home');
-  createTaskHeader('Home');
   if(!localStorage.getItem('Tasks')) {
 
   } else {
     const taskList = JSON.parse(localStorage.getItem('Tasks'));
-    taskList.forEach(task => {
-      addTaskChildren(task.title, task.description, task.dueDate, task.project, taskContainer);
-    })
-    createTaskButton();
+    itemCreator(taskList);
   }
 }
 
 function todayTab() {
-  resetContainer();
-  setActive('today');
-  createTaskHeader('Today');
   if(!localStorage.getItem('Tasks')) {
 
   } else {
     const taskList = JSON.parse(localStorage.getItem('Tasks')).filter(task => task.dueDate === dateFormatter(minDate()));
-    taskList.forEach(task => {
-      addTaskChildren(task.title, task.description, task.dueDate, task.project, taskContainer);
-    })
-    createTaskButton();
+    itemCreator(taskList);
+  }
+}
+
+function projectItemTab(e) {
+  if(!localStorage.getItem('Tasks')) {
+
+  } else {
+    const taskList = JSON.parse(localStorage.getItem('Tasks')).filter(task => task.project === e);
+    itemCreator(taskList);
+  }
+}
+
+function navSwitcher(e) {
+  setCurrentTab(e);
+  setActive(e);
+  resetContainer();
+  createTaskHeader(e);
+  switch(e) {
+    case 'Home': 
+      homeTab();
+      break;
+    case 'Today':
+      todayTab();
+      break;
+    default:
+      projectItemTab(e);
+      break;
   }
 }
 
@@ -180,6 +230,7 @@ function createProjectTab() {
 function createProjectOptions(selectId) {
   const projects = getLocalProjects();
   const select = document.querySelector(selectId);
+  select.innerHTML = "";
 
   if(projects) {
     projects.forEach(proj => {
@@ -196,7 +247,19 @@ function createAddProjectButton() {
   const hr = document.createElement('hr');
 
   document.querySelector('ul').appendChild(addProject);
+  document.getElementById('add-project-button').addEventListener('click', () => {
+    projectModal.showModal();
+  });
 }
+
+function itemCreator(list) {
+  list.forEach(task => {
+    addTaskChildren(task.title, task.description, task.dueDate, task.project, taskContainer);
+  })
+  createTaskButton();
+}
+
+// END OF TAB CREATORS HERE
 
 function createTaskHeader(tab) {
   //header
@@ -245,4 +308,12 @@ function removeActive() {
 
 function resetContainer() {
   taskContainer.innerHTML = "";
+}
+
+function setCurrentTab(tab) {
+  sessionStorage.setItem('currTab', tab);
+}
+
+function getCurrentTab() {
+  return sessionStorage.getItem('currTab');
 }
